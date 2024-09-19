@@ -1,6 +1,6 @@
-package week1;
+package week2;
 
-public class Pebbles {
+public class Pebbles2 {
     int [][]peb;
     int memo[][];
 
@@ -14,7 +14,7 @@ public class Pebbles {
 
     int nCols, count;
 
-    public Pebbles(int [][] input) {
+    public Pebbles2(int [][] input) {
         peb=input;
         nCols=peb[0].length;
         memo=new int [5][nCols];
@@ -35,26 +35,24 @@ public class Pebbles {
             max=Math.max(max, pebble(n,i));
         return max;
     }
+
     private int pebble(int i, int p) {
-        if (i == 0) {
+        count++;
+        if (i == 1) {
             return aPatternValue(i, p);
-        }
-
-        if (memo[p][i] != -99999) {
-            return memo[p][i];
-        }
-
-        int maxPebbles = -99999;
-        for (int j = 0; j < 3; j++) {
-            int nextP = nextPattern[p][j];
-            if (nextP != 0) {
-                maxPebbles = Math.max(maxPebbles, pebble(i - 1, nextP));
+        } else {
+            int max = -99999;
+            int k = 0;
+            while (k < 3 && nextPattern[p][k] != 0) {
+                int q = nextPattern[p][k];
+                max = Math.max(max, pebble(i - 1, q));
+                count++;
+                k++;
             }
+            return aPatternValue(i, p) + max;
         }
-
-        memo[p][i] = maxPebbles + aPatternValue(i, p);
-        return memo[p][i];
     }
+
 
     public int maxPebbleDP( int n ) {
         int max =-99999;
@@ -64,12 +62,14 @@ public class Pebbles {
     }
 
     private int pebbleDP(int i, int p) {
-        if (i == 0) {
-            return aPatternValue(i, p);
-        }
-
         if (memo[p][i] != -99999) {
             return memo[p][i];
+        }
+
+        count++;
+
+        if (i == 0) {
+            return aPatternValue(i, p);
         }
 
         int maxPebbles = -99999;
@@ -84,11 +84,13 @@ public class Pebbles {
         return memo[p][i];
     }
 
+
     public int maxPebbleIter(int n) {
         int[][] dp = new int[5][n + 1];
 
         for (int p = 1; p <= 4; p++) {
             dp[p][0] = aPatternValue(0, p);
+            count++;
         }
 
         for (int i = 1; i <= n; i++) {
@@ -101,6 +103,7 @@ public class Pebbles {
                     }
                 }
                 dp[p][i] = maxPebbles + aPatternValue(i, p);
+                count++;
             }
         }
 
@@ -114,9 +117,10 @@ public class Pebbles {
 
 
 
+
     private int aPatternValue(int i, int p) {
 
-        switch(p) {
+        switch(p){
             case 1: return peb[1][i];
             case 2: return peb[2][i];
             case 3: return peb[3][i];
@@ -132,7 +136,7 @@ public class Pebbles {
                 {0,-8,10,14,9,7,13,8,5,6,1,3,9},
                 {0,11,12,7,4,8,-2,9,4,-4,3,7,10} };
 
-        Pebbles myPeb =new Pebbles(input);
+        Pebbles2 myPeb =new Pebbles2(input);
 
         for (int i=1; i<input[0].length; i++) {
             myPeb.reset();
